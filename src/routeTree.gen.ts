@@ -27,6 +27,7 @@ import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppStockRouteImport } from './routes/_app.stock'
 import { Route as AppStockMovementRouteImport } from './routes/_app.stock-movement'
 import { Route as AppSuppliersRouteImport } from './routes/_app.suppliers'
+import { Route as AppSyncRouteImport } from './routes/_app.sync'
 import { Route as AppUsersRouteImport } from './routes/_app.users'
 
 const IndexRoute = IndexRouteImport.update({
@@ -118,6 +119,11 @@ const AppSuppliersRoute = AppSuppliersRouteImport.update({
   path: '/suppliers',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSyncRoute = AppSyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppUsersRoute = AppUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/stock': typeof AppStockRoute
   '/stock-movement': typeof AppStockMovementRoute
   '/suppliers': typeof AppSuppliersRoute
+  '/sync': typeof AppSyncRoute
   '/users': typeof AppUsersRoute
 }
 export interface FileRoutesByTo {
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/stock': typeof AppStockRoute
   '/stock-movement': typeof AppStockMovementRoute
   '/suppliers': typeof AppSuppliersRoute
+  '/sync': typeof AppSyncRoute
   '/users': typeof AppUsersRoute
 }
 export interface FileRoutesById {
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/_app/stock': typeof AppStockRoute
   '/_app/stock-movement': typeof AppStockMovementRoute
   '/_app/suppliers': typeof AppSuppliersRoute
+  '/_app/sync': typeof AppSyncRoute
   '/_app/users': typeof AppUsersRoute
 }
 export interface FileRouteTypes {
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/stock'
     | '/stock-movement'
     | '/suppliers'
+    | '/sync'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/stock'
     | '/stock-movement'
     | '/suppliers'
+    | '/sync'
     | '/users'
   id:
     | '__root__'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/_app/stock'
     | '/_app/stock-movement'
     | '/_app/suppliers'
+    | '/_app/sync'
     | '/_app/users'
   fileRoutesById: FileRoutesById
 }
@@ -386,6 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSuppliersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/sync': {
+      id: '/_app/sync'
+      path: '/sync'
+      fullPath: '/sync'
+      preLoaderRoute: typeof AppSyncRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/users': {
       id: '/_app/users'
       path: '/users'
@@ -410,6 +429,7 @@ interface AppRouteChildren {
   AppStockRoute: typeof AppStockRoute
   AppStockMovementRoute: typeof AppStockMovementRoute
   AppSuppliersRoute: typeof AppSuppliersRoute
+  AppSyncRoute: typeof AppSyncRoute
   AppUsersRoute: typeof AppUsersRoute
 }
 
@@ -427,6 +447,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppStockRoute: AppStockRoute,
   AppStockMovementRoute: AppStockMovementRoute,
   AppSuppliersRoute: AppSuppliersRoute,
+  AppSyncRoute: AppSyncRoute,
   AppUsersRoute: AppUsersRoute,
 }
 
