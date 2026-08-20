@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { syncManager, type SyncState } from "@/lib/sync/sync-manager";
 import { pendingQueue, type PendingOperation } from "@/lib/sync/pending-queue";
-import { loadSyncConfig, saveSyncConfig, type SyncConfig } from "@/lib/sync/config";
+import { defaultSyncConfig, loadSyncConfig, saveSyncConfig, type SyncConfig } from "@/lib/sync/config";
 
 /** État de synchronisation en direct (connexion, dernière sync, en attente). */
 export function useSyncState(): SyncState {
@@ -31,7 +31,9 @@ export function usePendingOperations(refreshMs = 3000): PendingOperation[] {
 
 /** Configuration réseau du poste (URL serveur, code terminal). */
 export function useSyncConfig(): [SyncConfig, (patch: Partial<SyncConfig>) => void] {
-  const [cfg, setCfg] = useState<SyncConfig>(() => loadSyncConfig());
+  // On démarre avec la config par défaut côté serveur ET client pour éviter
+  // tout désaccord d'hydratation SSR (localStorage n'existe pas sur le serveur).
+  const [cfg, setCfg] = useState<SyncConfig>(defaultSyncConfig);
   useEffect(() => setCfg(loadSyncConfig()), []);
   const update = (patch: Partial<SyncConfig>) => setCfg(saveSyncConfig(patch));
   return [cfg, update];
