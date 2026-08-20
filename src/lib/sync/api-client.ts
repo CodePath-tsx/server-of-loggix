@@ -76,14 +76,33 @@ export async function api<T>(path: string, init: RequestInit = {}, retry = true)
   return (await res.json()) as T;
 }
 
-/** Vérifie la disponibilité du serveur central. */
-export async function pingServer(): Promise<{ online: boolean; version?: string; database?: string }> {
+/** Vérifie la disponibilité du serveur central (avec message d'erreur détaillé). */
+export async function pingServer(): Promise<{
+  online: boolean;
+  version?: string;
+  database?: string;
+  error?: string;
+}> {
+  const { serverUrl } = loadSyncConfig();
   try {
     const res = await rawRequest("/api/health", { method: "GET" }, 4000);
-    if (!res.ok) return { online: false };
+    if (!res.ok) {
+      return { online: false, error: `Le serveur a répondu ${res.status} sur ${serverUrl}/api/health` };
+    }
     const data = (await res.json()) as { version?: string; database?: string };
     return { online: true, ...data };
-  } catch {
-    return { online: false };
+  } catch (err) {
+    const name = err instanceof Error ? err.name : "";
+    const msg = err instanceof Error ? err.message : String(err);
+    if (name === "AbortError") {
+      return {
+        online: false,
+        error: `Délai dépassé (4 s) vers ${serverUrl}. Le pare-feu Windows bloque probablement le port, ou l'adresse IP est incorrecte.`,
+      };
+    }
+    return {
+      online: false,
+      error: `Connexion impossible à ${serverUrl} — ${msg}. Vérifiez que le serveur tourne (npm run dev dans /server), que l'IP est la bonne, et que le port 3000 est ouvert dans le pare-feu.`,
+    };
   }
 }

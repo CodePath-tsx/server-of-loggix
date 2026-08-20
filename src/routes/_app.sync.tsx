@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { syncManager } from "@/lib/sync/sync-manager";
+import { pingServer } from "@/lib/sync/api-client";
 import { pendingQueue } from "@/lib/sync/pending-queue";
 import { connectRealtime, disconnectRealtime } from "@/lib/sync/realtime";
 import { connectionBadge, usePendingOperations, useSyncConfig, useSyncState } from "@/hooks/use-sync";
@@ -45,6 +46,28 @@ function SyncPage() {
   const [terminals, setTerminals] = useState<Terminal[]>([]);
   const [available, setAvailable] = useState<{ pos: string[]; display: string[] }>({ pos: [], display: [] });
   const [busy, setBusy] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [diagnostic, setDiagnostic] = useState<string | null>(null);
+
+  const testConnection = async () => {
+    setTesting(true);
+    setDiagnostic(null);
+    const url = serverUrl.replace(/\/+$/, "");
+    updateCfg({ serverUrl: url });
+    try {
+      const res = await pingServer();
+      if (res.online) {
+        setDiagnostic(`🟢 Serveur joignable : ${url}\nVersion ${res.version ?? "?"} · base de données : ${res.database ?? "?"}`);
+        toast.success("Serveur joignable");
+        void syncManager.syncNow();
+      } else {
+        setDiagnostic(`🔴 ${res.error ?? "Serveur injoignable"}`);
+        toast.error("Serveur injoignable");
+      }
+    } finally {
+      setTesting(false);
+    }
+  };
 
   useEffect(() => setServerUrl(cfg.serverUrl), [cfg.serverUrl]);
 
@@ -164,15 +187,25 @@ function SyncPage() {
               placeholder="http://192.168.1.10:3000"
             />
           </div>
-          <Button onClick={saveServer} variant="outline">
-            <Save className="mr-2 h-4 w-4" /> Enregistrer
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={saveServer} variant="outline">
+              <Save className="mr-2 h-4 w-4" /> Enregistrer
+            </Button>
+            <Button onClick={() => void testConnection()} variant="outline" disabled={testing}>
+              {testing ? "Test…" : "Tester la connexion"}
+            </Button>
+          </div>
           <div className="flex items-center gap-3 rounded-xl border px-4 py-2">
             <PlugZap className="h-4 w-4" />
             <span className="text-sm">Synchronisation</span>
             <Switch checked={cfg.enabled} onCheckedChange={toggleSync} />
           </div>
         </div>
+        {diagnostic && (
+          <p className="rounded-xl border border-dashed p-3 text-xs font-mono whitespace-pre-wrap">
+            {diagnostic}
+          </p>
+        )}
       </div>
 
       {/* Terminaux */}

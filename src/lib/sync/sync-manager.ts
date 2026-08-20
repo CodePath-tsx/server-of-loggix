@@ -91,7 +91,7 @@ class SyncManager {
     try {
       const health = await pingServer();
       if (!health.online) {
-        this.emit({ connection: "offline" });
+        this.emit({ connection: "offline", lastError: health.error });
         return this.state;
       }
       this.emit({
