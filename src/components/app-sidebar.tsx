@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ShoppingCart, FileText, Package, Tag, Database, ArrowLeftRight,
   Receipt, Users, Truck, BarChart3, UserCog, Settings, KeyRound, LogOut, Store,
-  LayoutDashboard,
+  LayoutDashboard, Wifi,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { logout, useSession, hasPermission, type Permission } from "@/lib/auth";
@@ -30,6 +30,7 @@ const items: Item[] = [
   { to: "/users", labelKey: "nav.users", icon: UserCog, perm: "users.manage" },
   { to: "/settings", labelKey: "nav.settings", icon: Settings, perm: "settings.manage" },
   { to: "/license", labelKey: "nav.license", icon: KeyRound, perm: "license.manage" },
+  { to: "/sync", labelKey: "nav.sync", icon: Wifi, perm: "settings.manage" },
 ];
 
 interface Props { onNavigate?: () => void }

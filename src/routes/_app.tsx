@@ -6,6 +6,7 @@ import { useMBStore } from "@/lib/mb-store";
 import { verifyLicense } from "@/core/license";
 import { getMachineId } from "@/lib/seed";
 import { setLanguage, type LangCode } from "@/i18n";
+import { installStoreSyncBridge } from "@/lib/sync/store-bridge";
 
 async function checkLicense(): Promise<boolean> {
   const lic = useMBStore.getState().license;
@@ -51,6 +52,8 @@ function AppLayout() {
   useEffect(() => {
     if (lang) setLanguage(lang);
   }, [lang]);
+
+  useEffect(() => installStoreSyncBridge(), []);
 
   return (
     <AppShell>

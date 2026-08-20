@@ -14,7 +14,8 @@
     "users": "Utilisateurs",
     "settings": "Paramètres",
     "license": "Licence",
-    "dashboard": "Tableau de bord"
+    "dashboard": "Tableau de bord",
+    "sync": "État du serveur"
   },
   "actions": {
     "save": "Enregistrer",

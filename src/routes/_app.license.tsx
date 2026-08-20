@@ -3,6 +3,7 @@ import { KeyRound, ShieldCheck, Cpu, RefreshCcw, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useMBStore, formatMoney } from "@/lib/mb-store";
 import { PageBody, PageHeader } from "@/components/app-shell";
+import { LicenseTerminalsPanel } from "@/components/license-terminals";
 
 export const Route = createFileRoute("/_app/license")({ component: LicensePage });
 
@@ -58,6 +59,8 @@ function LicensePage() {
           <div className="text-right"><p className="font-bold">Désactiver</p><p className="text-xs text-muted-foreground">Supprimer la licence</p></div>
         </button>
       </div>
+
+      <LicenseTerminalsPanel />
     </PageBody>
   );
 }
