@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { syncManager } from "@/lib/sync/sync-manager";
+import { pingServer } from "@/lib/sync/api-client";
 import { pendingQueue } from "@/lib/sync/pending-queue";
 import { connectRealtime, disconnectRealtime } from "@/lib/sync/realtime";
 import { connectionBadge, usePendingOperations, useSyncConfig, useSyncState } from "@/hooks/use-sync";
