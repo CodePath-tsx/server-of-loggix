@@ -45,6 +45,28 @@ function SyncPage() {
   const [terminals, setTerminals] = useState<Terminal[]>([]);
   const [available, setAvailable] = useState<{ pos: string[]; display: string[] }>({ pos: [], display: [] });
   const [busy, setBusy] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [diagnostic, setDiagnostic] = useState<string | null>(null);
+
+  const testConnection = async () => {
+    setTesting(true);
+    setDiagnostic(null);
+    const url = serverUrl.replace(/\/+$/, "");
+    updateCfg({ serverUrl: url });
+    try {
+      const res = await pingServer();
+      if (res.online) {
+        setDiagnostic(`🟢 Serveur joignable : ${url}\nVersion ${res.version ?? "?"} · base de données : ${res.database ?? "?"}`);
+        toast.success("Serveur joignable");
+        void syncManager.syncNow();
+      } else {
+        setDiagnostic(`🔴 ${res.error ?? "Serveur injoignable"}`);
+        toast.error("Serveur injoignable");
+      }
+    } finally {
+      setTesting(false);
+    }
+  };
 
   useEffect(() => setServerUrl(cfg.serverUrl), [cfg.serverUrl]);
 
