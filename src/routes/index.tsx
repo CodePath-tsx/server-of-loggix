@@ -1,24 +1,32 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect, Navigate } from "@tanstack/react-router";
+import { useMBStore } from "@/lib/mb-store";
+import { useAuthStore, hasPermission } from "@/lib/auth";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+function homeRoute(session: ReturnType<typeof useAuthStore.getState>["session"]) {
+  // Users with dashboard access land there; others go straight to POS.
+  return hasPermission(session?.role, "reports.view") ? "/dashboard" : "/pos";
+}
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  beforeLoad: () => {
+    if (typeof window === "undefined") return;
+    const store = useMBStore.getState();
+    if (!store.setupCompleted) throw redirect({ to: "/setup" });
+    if (!store.license) throw redirect({ to: "/activate" });
+    const session = useAuthStore.getState().session;
+    if (!session) throw redirect({ to: "/login" });
+    throw redirect({ to: homeRoute(session) });
+  },
+  component: IndexRedirect,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function IndexRedirect() {
+  const setupCompleted = useMBStore((s) => s.setupCompleted);
+  const license = useMBStore((s) => s.license);
+  const session = useAuthStore((s) => s.session);
+
+  if (!setupCompleted) return <Navigate to="/setup" />;
+  if (!license) return <Navigate to="/activate" />;
+  if (!session) return <Navigate to="/login" />;
+  return <Navigate to={homeRoute(session)} />;
 }

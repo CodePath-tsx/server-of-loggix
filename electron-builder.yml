@@ -1,0 +1,59 @@
+# LogixStore — Electron Builder configuration
+# Run: npm run electron:dist   (builds SPA → rebuilds native → packages)
+
+appId: com.logixstore.erp
+productName: LogixStore
+copyright: "© 2025 LogixStore"
+
+directories:
+  buildResources: assets
+  output: dist-packages
+
+# Files to bundle.
+# node_modules is NOT excluded here — electron-builder automatically includes
+# only packages listed in "dependencies" (prunes devDependencies).
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+
+# Native .node binaries CANNOT be loaded from inside an asar archive.
+# Unpack them so Electron can load them from the filesystem.
+asarUnpack:
+  - "**/*.node"
+
+# We rebuild native modules manually (npm run electron:rebuild) before packaging,
+# targeting the exact Electron version. Disable electron-builder's own rebuild
+# so it doesn't re-run with the wrong Node.js ABI.
+npmRebuild: false
+
+# ─── Windows ───
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: assets/icon.ico
+  requestedExecutionLevel: asInvoker
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: LogixStore
+
+# ─── macOS ───
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+  icon: assets/icon.icns
+  category: public.app-category.business
+
+# ─── Linux ───
+linux:
+  target:
+    - AppImage
+    - deb
+  icon: assets/icon.png
+  category: Office
