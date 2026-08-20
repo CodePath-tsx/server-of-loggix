@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { publishDisplayCart } from "@/lib/sync/display-channel";
+
 import { toast } from "sonner";
 import {
   Search, Plus, Minus, Trash2, Pause, Printer, CheckCircle2,
