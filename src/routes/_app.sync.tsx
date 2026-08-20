@@ -164,15 +164,25 @@ function SyncPage() {
               placeholder="http://192.168.1.10:3000"
             />
           </div>
-          <Button onClick={saveServer} variant="outline">
-            <Save className="mr-2 h-4 w-4" /> Enregistrer
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={saveServer} variant="outline">
+              <Save className="mr-2 h-4 w-4" /> Enregistrer
+            </Button>
+            <Button onClick={() => void testConnection()} variant="outline" disabled={testing}>
+              {testing ? "Test…" : "Tester la connexion"}
+            </Button>
+          </div>
           <div className="flex items-center gap-3 rounded-xl border px-4 py-2">
             <PlugZap className="h-4 w-4" />
             <span className="text-sm">Synchronisation</span>
             <Switch checked={cfg.enabled} onCheckedChange={toggleSync} />
           </div>
         </div>
+        {diagnostic && (
+          <p className="rounded-xl border border-dashed p-3 text-xs font-mono whitespace-pre-wrap">
+            {diagnostic}
+          </p>
+        )}
       </div>
 
       {/* Terminaux */}
