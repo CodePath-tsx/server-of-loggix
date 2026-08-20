@@ -218,11 +218,16 @@ export const isElectron: boolean =
   typeof window !== "undefined" && !!(window as any).electronAPI?.isElectron;
 
 /**
- * Fire-and-forget SQLite sync.
+ * Fire-and-forget SQLite sync + mise en file de synchronisation serveur.
  * Called after every Zustand mutation so SQLite stays in sync.
  * Never throws — errors are logged and swallowed so the UI stays fast.
  */
 function syncDb(method: string, ...args: unknown[]): void {
+  // File de synchronisation vers le serveur central (sans effet si désactivée).
+  void import("@/lib/sync/store-bridge")
+    .then((m) => m.queueSyncOperation(method, args))
+    .catch(() => {});
+
   const api = _eapi();
   if (!api) return;
   const fn = api[method] as ((...a: unknown[]) => Promise<unknown>) | undefined;
@@ -231,6 +236,7 @@ function syncDb(method: string, ...args: unknown[]): void {
       console.error(`[LogixStore DB] ${method} failed:`, e),
     );
   }
+
 }
 
 /**
