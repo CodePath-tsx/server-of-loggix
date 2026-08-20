@@ -152,7 +152,7 @@ export async function syncRoutes(app: FastifyInstance): Promise<void> {
         delete payload["createdAt"];
 
         if (op.action === "delete") {
-          if ("deletedAt" in (table as Record<string, unknown>)) {
+          if ("deletedAt" in (table as unknown as Record<string, unknown>)) {
             await db
               .update(table)
               .set({ deletedAt: now, updatedAt: now, version: currentVersion + 1 } as never)
