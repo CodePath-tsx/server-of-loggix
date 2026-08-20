@@ -1,0 +1,60 @@
+{
+  "app": { "name": "LogixStore", "tagline": "ERP · POS" },
+  "nav": {
+    "pos": "Point de Vente",
+    "sales": "Historique des Ventes",
+    "products": "Produits",
+    "categories": "Catégories",
+    "stock": "Stock",
+    "movements": "Mouvement de Stock",
+    "expenses": "Dépenses",
+    "customers": "Clients",
+    "suppliers": "Fournisseurs",
+    "reports": "Rapports",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "license": "Licence",
+    "dashboard": "Tableau de bord"
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "logout": "Déconnexion",
+    "activate": "Activer",
+    "close": "Fermer"
+  },
+  "auth": {
+    "login": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "remember": "Se souvenir de moi",
+    "invalid": "Nom d'utilisateur ou mot de passe invalide",
+    "disabled": "Ce compte est désactivé"
+  },
+  "theme": { "light": "Clair", "dark": "Sombre", "auto": "Auto" },
+  "notifications": { "title": "Notifications", "empty": "Aucune notification", "clear": "Tout effacer" },
+  "settings": {
+    "title": "Paramètres",
+    "desc": "Configurer les préférences de votre entreprise",
+    "company": "Entreprise",
+    "companyName": "Nom de l'entreprise",
+    "currency": "Devise",
+    "language": "Langue",
+    "taxPct": "TVA %",
+    "appearance": "Apparence & Impression",
+    "theme": "Thème",
+    "printerSize": "Format d'impression",
+    "backup": "Sauvegarde & Restauration",
+    "export": "Exporter la sauvegarde",
+    "restore": "Restaurer",
+    "backupNote": "La sauvegarde enregistre l'intégralité de la base de données localement (JSON). La version Electron exporte un fichier SQLite compressé.",
+    "saved": "Paramètres enregistrés",
+    "backupDone": "Sauvegarde téléchargée",
+    "restoreDone": "Restauration terminée — rechargement en cours",
+    "restoreError": "Fichier invalide"
+  }
+}
