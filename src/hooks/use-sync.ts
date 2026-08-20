@@ -7,7 +7,13 @@ import { loadSyncConfig, saveSyncConfig, type SyncConfig } from "@/lib/sync/conf
 /** État de synchronisation en direct (connexion, dernière sync, en attente). */
 export function useSyncState(): SyncState {
   const [state, setState] = useState<SyncState>(syncManager.state);
-  useEffect(() => syncManager.subscribe(setState), []);
+  useEffect(() => {
+    const unsub = syncManager.subscribe(setState);
+    return () => {
+      unsub();
+    };
+  }, []);
+
   return state;
 }
 
