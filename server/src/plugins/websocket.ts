@@ -15,7 +15,7 @@ export async function registerWebSocket(app: FastifyInstance): Promise<void> {
   await app.register(websocketPlugin);
 
   app.get("/ws", { websocket: true }, async (connection, request) => {
-    const socket = connection.socket ?? (connection as unknown as { socket: never });
+    const socket = ((connection as unknown as { socket?: unknown }).socket ?? connection) as import("ws").WebSocket;
     const query = request.query as { token?: string };
     let auth;
     try {
