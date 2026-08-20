@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as ActivateRouteImport } from './routes/activate'
+import { Route as DisplayRouteImport } from './routes/display'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AppCategoriesRouteImport } from './routes/_app.categories'
@@ -42,6 +43,11 @@ const AppRoute = AppRouteImport.update({
 const ActivateRoute = ActivateRouteImport.update({
   id: '/activate',
   path: '/activate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisplayRoute = DisplayRouteImport.update({
+  id: '/display',
+  path: '/display',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -133,6 +139,7 @@ const AppUsersRoute = AppUsersRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/activate': typeof ActivateRoute
+  '/display': typeof DisplayRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/categories': typeof AppCategoriesRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/activate': typeof ActivateRoute
+  '/display': typeof DisplayRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/categories': typeof AppCategoriesRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/activate': typeof ActivateRoute
+  '/display': typeof DisplayRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/_app/categories': typeof AppCategoriesRoute
@@ -200,6 +209,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/activate'
+    | '/display'
     | '/login'
     | '/setup'
     | '/categories'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/activate'
+    | '/display'
     | '/login'
     | '/setup'
     | '/categories'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/activate'
+    | '/display'
     | '/login'
     | '/setup'
     | '/_app/categories'
@@ -266,6 +278,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   ActivateRoute: typeof ActivateRoute
+  DisplayRoute: typeof DisplayRoute
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
 }
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/activate'
       fullPath: '/activate'
       preLoaderRoute: typeof ActivateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/display': {
+      id: '/display'
+      path: '/display'
+      fullPath: '/display'
+      preLoaderRoute: typeof DisplayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -457,6 +477,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   ActivateRoute: ActivateRoute,
+  DisplayRoute: DisplayRoute,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
 }
