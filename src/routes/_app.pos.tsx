@@ -155,6 +155,31 @@ function POSPage() {
   const total    = Math.max(0, subtotal - discount + tax);
   const change   = amountPaid > 0 ? amountPaid - total : 0;
 
+  /* ─── Diffusion vers l'afficheur de prix (DISPLAY-01…06) ─── */
+  useEffect(() => {
+    const last = items[items.length - 1] ?? null;
+    publishDisplayCart({
+      lines: items.map((i) => ({
+        name: i.name,
+        quantity: i.quantity,
+        price: i.price,
+        subtotal: i.subtotal,
+        unit: i.unit,
+      })),
+      subtotal,
+      discount,
+      tax,
+      total,
+      currency: settings.currency,
+      customerName: customers.find((c) => c.id === customerId)?.name,
+      lastItem: last
+        ? { name: last.name, quantity: last.quantity, price: last.price, subtotal: last.subtotal, unit: last.unit }
+        : null,
+      status: items.length ? "active" : "idle",
+    });
+  }, [items, subtotal, discount, tax, total, settings.currency, customers, customerId]);
+
+
   /* ─── Add piece product ─── */
   const addPieceProduct = (productId: string) => {
     const p = products.find((x) => x.id === productId);
